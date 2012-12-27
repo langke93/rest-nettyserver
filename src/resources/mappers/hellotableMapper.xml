@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.langke.core.dao.mappers.HelloTableMapper" >
+ 
+  <select id="select" resultType="map" parameterType="org.langke.bean.HelloTable" >
+    select name,score from hellotable
+    <where>
+    	<if test="name != null">and name = #{name}</if>
+    	<if test="score != null">and score = #{score}</if>
+    </where>
+    limit 10
+  </select>
+  
+  <insert id="insert" parameterType="org.langke.bean.HelloTable" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into hellotable (name, score)
+    values (#{demo.name,jdbcType=VARCHAR}, #{demo.score,jdbcType=INTEGER} )
+  </insert>
+</mapper>

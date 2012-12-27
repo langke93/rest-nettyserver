@@ -44,6 +44,8 @@ public class MemcachedUtil {
 	}
 	private static synchronized void init(){
 		try {
+			if(!Config.get().getBoolean("isUsedMemcached", false))
+				return;
 			if(ttcache_server == null){
 				throw new Exception("tt.cache.server is not in config");
 			}

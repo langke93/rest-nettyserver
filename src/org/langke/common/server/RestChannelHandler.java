@@ -15,6 +15,7 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 import org.langke.common.Config;
+import org.langke.common.CostTime;
 import org.langke.common.server.resp.ErrorResp;
 import org.langke.common.server.resp.Resp;
 import org.langke.util.logging.ESLogger;
@@ -36,29 +37,49 @@ public class RestChannelHandler extends SimpleChannelHandler {
 	}
 
 	public void messageReceived(ChannelHandlerContext ctx, final MessageEvent me) throws Exception {
+		CostTime cost = new CostTime();
+		cost.start();
 		final HttpRequest httpRequest = (HttpRequest) me.getMessage();
 		NettyHttpRequest request = new NettyHttpRequest(httpRequest);
 		Channel channel = me.getChannel();
 		final Handler handler = getHandler(request);
 		Resp response = null;
+		int code = 200,content_length;
 		if (handler == null) {
-			response = new ErrorResp("No handler found for uri ["+ request.uri() + "] and method [" + request.method() + "]",404);
-			sendResponse(request, response, httpRequest, channel);
+			code = 404;
+			response = new ErrorResp("No handler found for uri ["+ request.uri() + "] and method [" + request.method() + "]",code);
+			content_length = sendResponse(request, response, httpRequest, channel,cost);
 		}else{
 			try {
 				response = handler.handleRequest(request);
 			} catch (JSONException e){
+				code = 400;
 				response = new ErrorResp(e, 400);
 			} catch (Exception e) {
+				code = 500;
 				response = new ErrorResp(e);
 			}finally{
-				sendResponse(request, response, httpRequest, channel);
+				content_length = sendResponse(request, response, httpRequest, channel,cost);
 			}
 		}
+		String referer = request.header("Referer");
+		String userAgent = request.header("User-Agent");
+		String content = request.contentAsString();
+		if(content!=null && content.length()>0 && content.indexOf('\n')!=-1)
+			content = content.replace("\n", "");
+		StringBuffer sb = new StringBuffer();
+		sb.append(userAgent==null?"":userAgent).append(',');
+		sb.append(referer==null?"":referer).append(',');
+		sb.append(content);
+		if(cost.cost()>100)
+			log.warn("{} {} {} {} {} {} {}",channel.getRemoteAddress().toString(),httpRequest.getMethod().getName(),httpRequest.getUri(),code,content_length,"\""+sb.toString()+"\"",cost.cost());
+		else
+			log.info("{} {} {} {} {} {} {}",channel.getRemoteAddress().toString(),httpRequest.getMethod().getName(),httpRequest.getUri(),code,content_length,"\""+sb.toString()+"\"",cost.cost());
+
 	}
 	
 	@SuppressWarnings("unused")
-	public void sendResponse(NettyHttpRequest nettyRequest, Resp response, HttpRequest httpRequest, Channel channel){
+	public int sendResponse(NettyHttpRequest nettyRequest, Resp response, HttpRequest httpRequest, Channel channel,CostTime cost){
 		 // Decide whether to close the connection or not.
         boolean http10 = httpRequest.getProtocolVersion().equals(HttpVersion.HTTP_1_0);
         boolean close = HttpHeaders.Values.CLOSE.equalsIgnoreCase(httpRequest.getHeader(HttpHeaders.Names.CONNECTION)) ||
@@ -75,24 +96,19 @@ public class RestChannelHandler extends SimpleChannelHandler {
         } else {
             resp = new DefaultHttpResponse(HttpVersion.HTTP_1_1, status);
         }
-        
+        response.getRespData().setTime(cost.cost());
         // Convert the response content to a ChannelBuffer.
         ChannelFutureListener releaseContentListener = null;
         ChannelBuffer buf = response.toJson();
         resp.setContent(buf);
         resp.setHeader(HttpHeaders.Names.CONTENT_TYPE, CONTENT_TYPE);
-        resp.setHeader(HttpHeaders.Names.CONTENT_LENGTH, String.valueOf(buf.readableBytes()));
+        int content_length = buf.readableBytes();
+        resp.setHeader(HttpHeaders.Names.CONTENT_LENGTH, String.valueOf(content_length));
         resp.setHeader(HttpHeaders.Names.SERVER,Config.get().get("server.name", "rest-netty-server"));
         resp.setHeader("Via", NetworkUtils.getLocalAddress().getHostAddress());
 
         // Write the response.
         ChannelFuture future = channel.write(resp);
-        
-        String remoteAddress = channel.getRemoteAddress().toString();
-		String uri = httpRequest.getUri();
-		String method = httpRequest.getMethod().getName();
-		if(log.isInfoEnabled())
-			log.info("{}, {}, {}, http close? {}",remoteAddress, uri, method, close);
 		
         if (releaseContentListener != null) {
             future.addListener(releaseContentListener);
@@ -101,6 +117,7 @@ public class RestChannelHandler extends SimpleChannelHandler {
         if (close) {
             future.addListener(ChannelFutureListener.CLOSE);
         }
+        return content_length;
 	}
 	
 	 private HttpResponseStatus getStatus(int status) {

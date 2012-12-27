@@ -9,26 +9,39 @@
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/netty-3.2.2.Final.jar"/>
+	<classpathentry kind="lib" path="lib/netty-3.2.2.Final.jar" sourcepath="D:/Java/springsource/sts-2.9.1.RELEASE/org/jboss/netty/netty/3.2.2.Final/netty-3.2.2.Final-sources.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.aop-3.1.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.asm-3.1.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.beans-3.1.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.context-3.1.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.beans-3.1.0.RELEASE.jar" sourcepath="D:/Java/springsource/sts-2.9.1.RELEASE/org/springframework/spring-beans/3.1.0.RELEASE/spring-beans-3.1.0.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.context-3.1.0.RELEASE.jar" sourcepath="D:/Java/springsource/sts-2.9.1.RELEASE/org/springframework/spring-context/3.1.0.RELEASE/spring-context-3.1.0.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.context.support-3.1.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.core-3.1.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.expression-3.1.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.jdbc-3.1.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/org.springframework.jdbc-3.1.0.RELEASE.jar" sourcepath="/org.springframework.jdbc"/>
 	<classpathentry kind="lib" path="lib/org.springframework.orm-3.1.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.test-3.1.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/org.springframework.transaction-3.1.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/fastjson-1.1.15.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/aspectjrt-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/aspectjweaver-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/memcached-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/asm-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjrt-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjweaver-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/cglib-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-jexl-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/javamelody.jar"/>
+	<classpathentry kind="lib" path="lib/jrobin-1.5.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-3.0.jar" sourcepath="D:/Java/springsource/sts-2.9.1.RELEASE/org/eclipse/jetty/orbit/javax.servlet/3.0.0.v201112011016/javax.servlet-3.0.0.v201112011016-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-6.1.26.jar" sourcepath="D:/Java/springsource/sts-2.9.1.RELEASE/org/mortbay/jetty/jetty/6.1.26/jetty-6.1.26-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-6.1.26.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp-1.4.jar" sourcepath="D:/Java/springsource/sts-2.9.1.RELEASE/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/h2-1.3.170.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis-3.1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/mybatis-spring-1.1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

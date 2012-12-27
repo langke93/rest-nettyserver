@@ -23,6 +23,8 @@ import org.langke.common.server.RestChannelHandler;
 import org.langke.common.server.ServerAddress;
 import org.langke.common.server.resp.Resp;
 import org.langke.core.handler.DemoHandler;
+import org.langke.util.logging.ESLogger;
+import org.langke.util.logging.Loggers;
 
 
 /**
@@ -32,6 +34,7 @@ import org.langke.core.handler.DemoHandler;
  *
  */
 public class RestNettyServer extends BaseNioServer {
+	private static ESLogger log = Loggers.getLogger(RestNettyServer.class);
 
 	private RestChannelHandler restHandler = null;
 
@@ -44,6 +47,7 @@ public class RestNettyServer extends BaseNioServer {
 			}
 		});
 		DemoHandler demo = new DemoHandler();
+		//Handler demo =  net.bull.javamelody.MonitoringProxy.createProxy(new DemoHandler());
 		restHandler.registerHandler(HttpMethod.GET, "/demo/{label}", demo);
 		restHandler.registerHandler(HttpMethod.POST, "/demo/{label}", demo);
 		
@@ -105,8 +109,10 @@ public class RestNettyServer extends BaseNioServer {
 
 	public static void main(String[] args) {
 		SpringApplicationContext.getInstance();
-		RestNettyServer o = new RestNettyServer();
+		final RestNettyServer o = new RestNettyServer();
 		o.init();
 		o.start();
+		new JavaMelodyMonitorServer(o.serverName(),o.getServerAddress().getHost(),o.getServerAddress().getPort());
+		
 	}
 }
