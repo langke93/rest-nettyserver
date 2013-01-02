@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<project default="jar" basedir="." name="rest-nettyserver">
+	  <property name="project.name" value="rest-nettyserver"/>
+  <property name="version" value="0.1"/>
+  <property name="src.dir" value="src"/>
+  <property name="lib.dir" value="lib"/>
+  <property name="build.dir" value="build"/>
+  <property name="bin.dir" value="bin"/>
+  <path id="compile.classpath">
+    <fileset dir="${lib.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  <path id="run.classpath">
+    <fileset dir="${lib.dir}">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${build.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+	
+  <target name="clean">
+    <delete failonerror="false" dir="${build.dir}"/>
+  </target>
+	
+  <target name="compile" depends="clean">
+    <mkdir dir="${build.dir}"></mkdir>
+    <javac destdir="${build.dir}" encoding="UTF-8" debug="on">
+          <src path="${src.dir}"/>
+      	  <classpath refid="compile.classpath"/>
+    </javac>
+    <copydir dest="${build.dir}" src="${src.dir}">
+      <exclude name="**/*.java"></exclude>
+    </copydir>
+  </target>
+  
+  <target name="jar" depends="compile">
+    <jar jarfile="${bin.dir}/${project.name}-${version}.jar">
+      <fileset dir="${build.dir}"/>
+    </jar>
+  </target>
+	
+</project>
+
